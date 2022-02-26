@@ -25,44 +25,46 @@ function shuffle(array) {
   return array;
 }
 
-shuffle(playersList);
-
-// Create player cards
-for (var i = 0; i < playersList.length; i++) {
-  var node = document.createElement("div");
-  node.className = "card";
-  node.setAttribute("style", "height: 2rem; margin: 0.5rem;");
-  node.appendChild(document.createTextNode(playersList[i]));
-  players.appendChild(node);
+function CreatePlayerCards() {
+  shuffle(playersList);
+  // Create player cards
+  for (var i = 0; i < playersList.length; i++) {
+    var node = document.createElement("div");
+    node.className = "card";
+    node.setAttribute("style", "height: 2rem; margin: 0.5rem;");
+    node.appendChild(document.createTextNode(playersList[i]));
+    players.appendChild(node);
+  }
 }
+
 // Control the Progress Bar function
 var i = 0;
 var bar = document.querySelector(".progress-bar");
-ready = false;
-function makeProgress(ready) {
+
+function makeProgress() {
   bar.style.display = "block";
-  if (i < 100) {
+  if (i >= 100) {
+    bar.style.display = "none";
+    i = 0;
+  } else {
     i = i + Math.random() * 10;
     bar.style.width = i + "%";
     bar.innerText = i > 100 ? "100%" : Math.round(i) + "%";
-  } else {
-    i = 100;
+    // Wait for sometime before running this script again
+    setTimeout("makeProgress()", Math.random() * 1000);
   }
-  // Wait for sometime before running this script again
-  setTimeout("makeProgress()", Math.random() * 750);
-  ready = true;
 }
 
 //  Get the Make Teams button
 var makeTeamsBtn = document.getElementById("makeTeams");
 makeTeamsBtn.onclick = () => {
   makeProgress();
+  makeTeamsBtn.disabled = true;
   setTimeout(makeTeams, 10000);
 };
 
 function makeTeams() {
   // Disable this button
-  makeTeamsBtn.disabled = true;
 
   var team1 = [];
   var team2 = [];
@@ -95,3 +97,26 @@ function makeTeams() {
   node.appendChild(document.createTextNode("Team 2: " + team2.join(", ")));
   results.appendChild(node);
 }
+
+// Get the New Teams Button
+var newTeamsBtn = document.getElementById("newTeams");
+newTeamsBtn.onclick = () => {
+  // Create new players
+  newPlayers = prompt(
+    "Enter the names of all your players separated by commas"
+  );
+
+  if (newPlayers == null || newPlayers == "") {
+    return;
+  }
+
+  // Clear the players and results div
+  results.innerHTML = "";
+  players.innerHTML = "";
+  makeTeamsBtn.disabled = false;
+
+  playersList = newPlayers.split(",");
+  CreatePlayerCards();
+};
+
+CreatePlayerCards();
