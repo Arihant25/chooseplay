@@ -1,8 +1,31 @@
-playersList = [" Arihant", " Sai", " Abhirup", " Aryan", " Ishaan"];
+playersList = ["Arihant", "Sai", "Abhirup", "Aryan", "Ishaan"];
 
 // Get the players and results divs
 var players = document.getElementById("players");
 var results = document.getElementById("results");
+
+// Shuffle the list
+function shuffle(array) {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+}
+
+shuffle(playersList);
 
 // Create player cards
 for (var i = 0; i < playersList.length; i++) {
@@ -56,21 +79,19 @@ function makeTeams() {
   players.appendChild(document.createElement("br"));
 
   var node = document.createElement("div");
-  node.className = "card";
+  node.className = "card text-center";
   node.setAttribute("style", "height: 2rem; margin: 0.5rem;");
-  node.appendChild(document.createTextNode("Team 1:" + team1));
-
+  node.appendChild(document.createTextNode("Team 1: " + team1.join(", ")));
   results.appendChild(node);
 
   node = document.createElement("div");
-  node.className = "text-center";
+  node.className = "text-center ";
   node.appendChild(document.createTextNode("Vs."));
   results.appendChild(node);
 
   var node = document.createElement("div");
-  node.className = "card";
+  node.className = "card text-center";
   node.setAttribute("style", "height: 2rem; margin: 0.5rem;");
-  node.appendChild(document.createTextNode("Team 2:" + team2));
-
+  node.appendChild(document.createTextNode("Team 2: " + team2.join(", ")));
   results.appendChild(node);
 }
